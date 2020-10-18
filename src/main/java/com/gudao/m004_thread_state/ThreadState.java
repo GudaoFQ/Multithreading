@@ -24,10 +24,12 @@ public class ThreadState {
 
     //通过Thread.getState()来获取线程的状态
     public static void main(String[] args) throws InterruptedException {
+        //创建线程MyThread
         Thread threadTest = new MyThread();
         System.out.println(threadTest.getState());
         threadTest.start();
         threadTest.join();
+        //通过join让threadTest执行结束
         System.out.println(threadTest.getState());
     }
 }
