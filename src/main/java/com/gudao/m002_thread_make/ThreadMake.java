@@ -48,7 +48,7 @@ public class ThreadMake {
 
         //线程池实现
         new Thread(()->{
-            System.out.println("mothed ThreadPool");
+            System.out.println("mothed ThreadPool By Lambda");
         }).start();
     }
 }
