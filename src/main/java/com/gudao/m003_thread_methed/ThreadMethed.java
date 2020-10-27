@@ -1,11 +1,11 @@
-package com.gudao.m003_thread_mothed;
+package com.gudao.m003_thread_methed;
 
 /**
  * Author : GuDao
  * 2020-10-18
  */
 
-public class ThreadMothed {
+public class ThreadMethed {
     public static void main(String[] args) {
         //sleepTest();
         //System.out.println("main");
