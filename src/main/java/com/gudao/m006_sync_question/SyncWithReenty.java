@@ -12,6 +12,7 @@ public class SyncWithReenty {
         for (int i = 0; i < 5; i++) {
             System.out.println("methodOne：" + i);
         }
+        //重入methodTwo方法
         methodTwo();
     }
 
