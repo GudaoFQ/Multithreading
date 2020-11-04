@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class VolatileParameterVisible {
-    private volatile boolean status = true;
+    private /*volatile*/ boolean status = true;
 
     //线程一当status为true的时候一直运行，为false停止
     Thread tOne = new Thread(() -> {
