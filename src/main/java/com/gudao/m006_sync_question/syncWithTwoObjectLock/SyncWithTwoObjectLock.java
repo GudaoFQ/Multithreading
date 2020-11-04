@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class SyncWithTwoObjectLock {
-    private Object lock = new Object();
+    private /*final*/ Object lock = new Object();
 
     public void syncMethed(){
         synchronized (lock){
@@ -34,9 +34,11 @@ public class SyncWithTwoObjectLock {
             e.printStackTrace();
         }
 
+        Thread t2 = new Thread(lock :: syncMethed,"Thread002");
+
         //将SyncWithTwoObjectLock中的object锁改变
         lock.lock = new Object();
         //此时main线程也能进入syncMethed方法
-        lock.syncMethed();
+        t2.start();
     }
 }
