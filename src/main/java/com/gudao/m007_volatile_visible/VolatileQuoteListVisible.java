@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 测试Volatile对数组类型的可见性，结论：volatile 引用类型（包括数组）只能保证引用本身的可见性，不能保证内部字段的可见性
  * list引用的可见性验证
  * Author : GuDao
  * 2020-10-29
