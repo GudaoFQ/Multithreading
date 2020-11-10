@@ -8,10 +8,21 @@ import java.util.concurrent.Phaser;
  */
 
 public class PhaserDemo {
+    static PhaserMarriage marriage = new PhaserMarriage();
+
+    public static void main(String[] args) {
+        PhaserDemo.marriage.bulkRegister(7);
+
+        for (int i = 0; i < 5; i++) {
+            new Thread(new Person("Person"+i)).start();
+        }
+        new Thread(new Person("新郎")).start();
+        new Thread(new Person("新娘")).start();
+    }
 
 }
 
-class Person{
+class Person implements Runnable {
     private String name;
 
     public Person(String name) {
@@ -20,6 +31,32 @@ class Person{
 
     public void register(){
         System.out.println(this.name+"来了");
+        //让线程到达此处，满足向下执行的条件后再向下走
+        PhaserDemo.marriage.arriveAndAwaitAdvance();
+    }
+
+    public void eat(){
+        System.out.println(this.name+"吃完了");
+        //让线程到达此处，满足向下执行的条件后再向下走
+        PhaserDemo.marriage.arriveAndAwaitAdvance();
+    }
+
+    public void sleep(){
+        if(name.equals("新郎") || name.equals("新娘")){
+            //让线程到达此处，满足向下执行的条件后再向下走
+            PhaserDemo.marriage.arriveAndAwaitAdvance();
+            System.out.println(name+"入洞房");
+        }else{
+            //将其它线程注销
+            PhaserDemo.marriage.arriveAndDeregister();
+        }
+    }
+
+    @Override
+    public void run() {
+        register();
+        eat();
+        sleep();
     }
 }
 
@@ -37,6 +74,7 @@ class PhaserMarriage extends Phaser {
      *
      * 支持最常见的用例,此方法返回的默认实现true当注册方的数量已变为零作为党调用的结果arriveAndDeregister.
      * 您可以禁用此行为,从而使持续在未来的登记,通过重写此方法总是返回false:
+     *
      * @param phase 进入此方法时的当前阶段号
      * @param registeredParties 当前注册方的数量
      * @return
