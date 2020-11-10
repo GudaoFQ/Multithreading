@@ -11,6 +11,7 @@ public class PhaserDemo {
     static PhaserMarriage marriage = new PhaserMarriage();
 
     public static void main(String[] args) {
+        //设置注册量
         PhaserDemo.marriage.bulkRegister(7);
 
         for (int i = 0; i < 5; i++) {
@@ -81,6 +82,15 @@ class PhaserMarriage extends Phaser {
      */
     @Override
     protected boolean onAdvance(int phase, int registeredParties) {//这个方法的返回值是boolean类型的，所以case中的返回值都是boolean类型
+
+        /*
+        protected boolean onAdvance(int phase, int registeredParties) {
+            return registeredParties == 0;
+        }
+
+        onAdvance的内部实现，默认会将注册方数量置0【每次返回return false后就置0】
+         */
+
         switch (phase){
             case 0:
                 System.out.println("人都到齐了，开始吃饭");
