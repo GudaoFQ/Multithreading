@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 2020-11-16
  */
 
-public class WithReentractLock {
+public class WithCondition {
     public static void main(String[] args) {
         ContainerReen<String> container = new ContainerReen();
         for (int i = 0; i < 2; i++) {
