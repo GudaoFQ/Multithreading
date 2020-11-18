@@ -13,6 +13,8 @@ AbstractOwnableSynchronizer -> Sync
 Sync -> AbstractQueuedSynchronizer : setState(nextc) 当前线程与lock的拥有线程相同，修改lock的state进行+1操作
 
 Sync -> NonfairSync
+NonfairSync -> AbstractQueuedSynchronizer : 对应上面tryAcquire的调用返回值true
+AbstractQueuedSynchronizer -> NonfairSync : 对应上面acquire的返回
 NonfairSync -> ReentrantLock
 @enduml
 
