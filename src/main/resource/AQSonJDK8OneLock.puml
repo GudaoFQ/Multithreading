@@ -1,0 +1,10 @@
+## 1.8中的lock.lock非公平第一次加锁成功底层原理
+@startuml
+ReentrantLock -> NonfairSync : lock() 调用ReentrantLock中的内部类NofairSynclock()【非公平锁】中的lock()方法
+NonfairSync -> AbstractQueuedSynchronizer : compareAndSetState(0, 1) 调用AQS中的compareAndSetState方法来通过CAS修改state
+AbstractQueuedSynchronizer -> AbstractOwnableSynchronizer : 当前锁如果没有线程占用，state即可修改成功；修改成功后调用：setExclusiveOwnerThread(Thread.currentThread())将当前线程设置为这把锁的拥有者
+
+AbstractOwnableSynchronizer -> AbstractQueuedSynchronizer
+AbstractQueuedSynchronizer -> NonfairSync
+NonfairSync -> ReentrantLock
+@enduml

@@ -16,7 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 
 public class ReentrantLockCompareSync {
-    ReentrantLock lock = new ReentrantLock();
+    ReentrantLock lock = new ReentrantLock(true);
 
     public void methedReentrantLock(){
         try{
@@ -47,19 +47,19 @@ public class ReentrantLockCompareSync {
         List<Thread> list = new ArrayList<>();
 
         //测试lock.lock()
-        /*for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 100; i++) {
             list.add(new Thread(reent::methedReentrantLock));
         }
         list.forEach(e->{
             e.start();
-        });*/
+        });
 
         //测试synchronized
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             list.add(new Thread(reent::methedSynchromized));
         }
         list.forEach(e->{
             e.start();
-        });
+        });*/
     }
 }

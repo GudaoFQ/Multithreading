@@ -1,0 +1,38 @@
+## 1.8中的lock.lock非公平重入锁底层原理
+@startuml
+ReentrantLock -> NonfairSync : lock() 调用ReentrantLock中的内部类NofairSynclock()【非公平锁】中的lock()方法
+NonfairSync -> AbstractQueuedSynchronizer : compareAndSetState(0, 1) 调用AQS中的compareAndSetState方法来通过CAS修改state
+AbstractQueuedSynchronizer -> NonfairSync : 当前锁已经被占用，state修改不成功
+NonfairSync -> AbstractQueuedSynchronizer : acquire(1)
+AbstractQueuedSynchronizer -> NonfairSync : tryAcquire(int acquires)
+NonfairSync -> Sync : 其实他是调用了父类Sync中的nonfairTryAcquire(acquires)
+Sync -> AbstractQueuedSynchronizer : getState() 获取lock中的同步器中的state
+AbstractQueuedSynchronizer -> Sync : int c = 1
+Sync -> AbstractOwnableSynchronizer : getExclusiveOwnerThread() 获取当前lock的拥有线程
+AbstractOwnableSynchronizer -> Sync
+Sync -> AbstractQueuedSynchronizer : setState(nextc) 当前线程与lock的拥有线程相同，修改lock的state进行+1操作
+
+Sync -> NonfairSync
+NonfairSync -> ReentrantLock
+@enduml
+
+Sync继承了AQS下面是Sync中的nonfairTryAcquire
+final boolean nonfairTryAcquire(int acquires) {
+    final Thread current = Thread.currentThread();//获取当前线程
+    int c = getState();//获取当前线程中的state值，判断当前lock是否已经被其他线程占用
+    if (c == 0) {//如果没有被占用，就通过cas修改state值
+        if (compareAndSetState(0, acquires)) {
+            setExclusiveOwnerThread(current);//将state的值修改成功后将锁设置当前线程的
+            return true;
+        }
+    }
+    else if (current == getExclusiveOwnerThread()) {//如果state!=0表示当前锁已经被占用，判断占用锁的线程是不是当前线程【可重入性】
+        int nextc = c + acquires;//如果当前线程与占用锁的线程是同一个，那么对state进行+1的操作
+        if (nextc < 0) // overflow
+            throw new Error("Maximum lock count exceeded");
+        setState(nextc);//通过cas修改state的值
+        return true;
+    }
+    return false;
+}
+
